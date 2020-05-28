@@ -53,5 +53,5 @@ $cmd
 echo "Kallisto is done"
 echo `date +"%H:%M:%S"`
 
-# create a file indicating kallisto is done, used for executing kallistoRelease.sh in RNA_pipeline_kallisto.sh
+# create a file indicating kallisto is done, used for executing kallistoRelease.sh from post_demux_Novaseq6000.sh
 touch 'logs/'$sample'_kallisto_done.txt'

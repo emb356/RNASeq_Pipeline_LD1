@@ -1,4 +1,8 @@
 #!/bin/bash 
+# file name: cronjob_Illumina_NovaSeq.sh
+# checks NovaSeq and NextSeq run dirs for completed and unprocessed runs
+# triggers pipeline
+# executed with cron
 
 export PATH=$PATH:/usr/local/bin
 
@@ -10,14 +14,14 @@ fi
 
 . $setting
 
-## number of threads used for bcl2fastq demultiplex
+# number of threads used for bcl2fastq demultiplex
 nt=16
 
 runs=`ls $NovaSeqRuns`
 for f in $runs; do
     
     if [ ! -d $NovaSeqRuns/$f ]; then
-	## skip if $f isn't a directory
+	# skip if $f isn't a directory
 	continue
     fi
 
@@ -26,12 +30,12 @@ for f in $runs; do
     fi
 
     g=`grep -w $f $StatusDir/basecall.complete`
-#if run has not been processed, we will not find it in basecall.complete file  
+# if run has not been processed, we will not find it in basecall.complete file  
     if [[ $g == "" ]]; then
 	# check if the run is complete
-	sampleSheetScript="$PIPEBASE/NovoSeqSampleSheet.rb"
+	sampleSheetScript="$LD1BASE/NovaSeqSampleSheet.rb"
 	seqCompleteFname="SequenceComplete.txt"
-#add run to basecall.complete if it is done, and run bcl2fastq
+# add run to basecall.complete if it is done, and run bcl2fastq
 	echo $NovaSeqRuns/$f/$seqCompleteFname
 	if [[ -e $NovaSeqRuns/$f/$seqCompleteFname ]]; then
 	    cmd1="ruby $sampleSheetScript $SampleSheets/$f.csv $NovaSeqRuns/$f/SampleSheet.csv"
@@ -41,12 +45,12 @@ for f in $runs; do
         if [[ -s $NovaSeqRuns/$f/SampleSheet.csv && -e $NovaSeqRuns/$f/$seqCompleteFname && -e $NovaSeqRuns/$f/CopyComplete.txt ]]; then
 		    
 	    echo "process $f"
-	    echo -e "$f\t$NovaSeqRuns/$f/\t$FastqDir/LD1_$f" >> $StatusDir/basecall.complete
+	    echo -e "$f\t$NovaSeqRuns/$f/\t$FastqDir/$f" >> $StatusDir/basecall.complete
 
 
 
 
-            cmd1="sh /home/local/ARCS/ngs/Pipeline_ld1/scripts/bclToFastqV2_Nova.sh -i $NovaSeqRuns/$f -o $FastqDir/"LD1_"$f -b ${bcl2fastqBin} -s /home/local/ARCS/ngs/Pipeline_ld1/scripts/global_setting.sh -n $nt -m 1"
+            cmd1="sh $LD1BASE/bclToFastqV2_Nova.sh -i $NovaSeqRuns/$f -o $FastqDir/$f -b ${bcl2fastqBin} -s $LD1BASE/global_setting.sh -n $nt -m 1"
 		
 	    echo "$cmd1"
             $cmd1
@@ -58,7 +62,7 @@ done
 runs=`ls $NextSeqRuns`
 for f in $runs; do
     if [ ! -d $NextSeqRuns/$f ]; then
-	## skip if $f isn't a directory
+	# skip if $f isn't a directory
 	continue
     fi
 
@@ -71,16 +75,15 @@ for f in $runs; do
 	if [[ ! -s $SampleSheets/$f.csv ]]; then
 	    echo "SampleSheet ($SampleSheets/$f.csv) is missing. Failed to start demultiplexing." ;
 	    continue
-	    ##exit ;
 	fi
-        cmd1="ruby $PIPEBASE/Hiseq2NextSeqSampleSheet.rb $SampleSheets/$f.csv $NextSeqRuns/$f/SampleSheet.csv"
+        cmd1="ruby $LD1BASE/NextSeqSampleSheet.rb $SampleSheets/$f.csv $NextSeqRuns/$f/SampleSheet.csv"
         echo $cmd1
         $cmd1
 
 	if [[ -s $NextSeqRuns/$f/SampleSheet.csv && -s  $NextSeqRuns/$f/RTAComplete.txt ]]; then
 	    echo "process $f"
-	    echo -e "$f\t$NextSeqRuns/$f/\t$FastqDir/LD1_$f" >> $StatusDir/basecall.complete
-            cmd1="sh /home/local/ARCS/ngs/Pipeline_ld1/scripts/bclToFastqV2_Nova.sh -i $NextSeqRuns/$f -o $FastqDir/"LD1_"$f -b ${bcl2fastqBin} -s /home/local/ARCS/ngs/Pipeline_ld1/scripts/global_setting.sh -n $nt -m 1"
+	    echo -e "$f\t$NextSeqRuns/$f/\t$FastqDir/$f" >> $StatusDir/basecall.complete
+            cmd1="sh $LD1BASE/bclToFastqV2_Nextseq.sh -i $NextSeqRuns/$f -o $FastqDir/$f -b ${bcl2fastqBin} -s $LD1BASE/global_setting.sh -n $nt -m 1"
 	    $cmd1
   	    echo $cmd1
         fi

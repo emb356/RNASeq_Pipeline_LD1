@@ -38,7 +38,6 @@ if [ ! -d  $genome"_kallisto" ]; then mkdir -p $genome"_kallisto"; fi
 
 # finding library type
 # libType = N for unstranded or S for stranded
-libType="S"
 findType1=`echo $f1 | grep "STRDPOLYA\|RIBOZERO\|PLATESEQ" | wc -c`
 findType2=`echo $f1 | grep "CLONTECH\|TRUSEQ\|NEXTERA" | wc -c`
 

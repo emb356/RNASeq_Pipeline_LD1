@@ -84,6 +84,15 @@ fnameStem <- paste( "DESeq2_kallisto",
                            collapse = "_" ),
                     sep="_" )
 
+# unix limits the length of filenames to 256 chars, so just to be careful, if the length is 200 chars, set it to something simple
+if ( nchar( fnameStem ) > 200 )
+     fnameStem <- paste( "DESeq2_kallisto",
+                    paste( sapply(length(sampleList[[1]]), paste, collapse="-"),
+                           collapse = "_" ), "samples_vs",
+                    paste( sapply(length(sampleList[[2]]), paste, collapse="-"),
+                           collapse = "_" ),
+                    sep="_" )
+
 fname <- paste( fnameStem,
                 "DEG_list.csv",
                 sep="-" )

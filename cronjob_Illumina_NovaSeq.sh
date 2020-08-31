@@ -35,10 +35,15 @@ for f in $runs; do
 	# check if the run is complete
 	sampleSheetScript="$LD1BASE/NovaSeqSampleSheet.rb"
 	seqCompleteFname="SequenceComplete.txt"
+        # check if sample sheet exists
+        if [[ -s $SampleSheets/$f.csv && ! -e $NovaSeqRuns/$f/$seqCompleteFname ]]; then
+            echo "SampleSheet ($SampleSheets/$f.csv) found. Waiting for run to finish." ;
+            continue
+        fi
 # add run to basecall.complete if it is done, and run bcl2fastq
-	echo $NovaSeqRuns/$f/$seqCompleteFname
-	if [[ -e $NovaSeqRuns/$f/$seqCompleteFname ]]; then
-	    cmd1="ruby $sampleSheetScript $SampleSheets/$f.csv $NovaSeqRuns/$f/SampleSheet.csv"
+	if [[ -e $NovaSeqRuns/$f/$seqCompleteFname && -s $SampleSheets/$f.csv ]]; then
+	    echo $NovaSeqRuns/$f/$seqCompleteFname
+            cmd1="ruby $sampleSheetScript $SampleSheets/$f.csv $NovaSeqRuns/$f/SampleSheet.csv"
 	    echo "$cmd1"
 	    $cmd1
         fi
@@ -46,13 +51,9 @@ for f in $runs; do
 		    
 	    echo "process $f"
 	    echo -e "$f\t$NovaSeqRuns/$f/\t$FastqDir/$f" >> $StatusDir/basecall.complete
-
-
-
-
             cmd1="sh $LD1BASE/bclToFastqV2_Nova.sh -i $NovaSeqRuns/$f -o $FastqDir/$f -b ${bcl2fastqBin} -s $LD1BASE/global_setting.sh -n $nt -m 1"
-		
-	    echo "$cmd1"
+
+            echo "$cmd1"
             $cmd1
 	fi
     fi
@@ -72,14 +73,19 @@ for f in $runs; do
     
     g=`grep -w $f $StatusDir/basecall.complete`
     if [[ $g == "" ]]; then
-	if [[ ! -s $SampleSheets/$f.csv ]]; then
-	    echo "SampleSheet ($SampleSheets/$f.csv) is missing. Failed to start demultiplexing." ;
+        # check if sample sheet exists
+	if [[ -s $SampleSheets/$f.csv && ! -e $NextSeqRuns/$f/RTAComplete.txt ]]; then
+            echo "SampleSheet ($SampleSheets/$f.csv) found. Waiting for run to finish." ;
 	    continue
 	fi
-        cmd1="ruby $LD1BASE/NextSeqSampleSheet.rb $SampleSheets/$f.csv $NextSeqRuns/$f/SampleSheet.csv"
-        echo $cmd1
-        $cmd1
 
+# add run to basecall.complete if it is done, and run bcl2fastq
+	if [[ -e $NextSeqRuns/$f/RTAComplete.txt && -s $SampleSheets/$f.csv ]]; then
+	    echo $NextSeqRuns/$f/RTAComplete.txt
+            cmd1="ruby $LD1BASE/NextSeqSampleSheet.rb $SampleSheets/$f.csv $NextSeqRuns/$f/SampleSheet.csv"
+            echo $cmd1
+            $cmd1
+        fi
 	if [[ -s $NextSeqRuns/$f/SampleSheet.csv && -s  $NextSeqRuns/$f/RTAComplete.txt ]]; then
 	    echo "process $f"
 	    echo -e "$f\t$NextSeqRuns/$f/\t$FastqDir/$f" >> $StatusDir/basecall.complete

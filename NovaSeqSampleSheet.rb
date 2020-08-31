@@ -4,18 +4,20 @@
 # executed in cronjob_Illumina_Novaseq.sh
 
 def main()
- input = ARGV[0] # origial sample sheet
+ input = ARGV[0] # original sample sheet
  output = ARGV[1] # formated sample sheet
 
   infile = File.new(input, "r")
   outfile = File.new(output, "w")
+
+  # counter for headers
   flag = 1
-  indexLength = 6
+
   infile.each {
     |line|
 
     cols = line.chomp.split(/,/)
-  
+ 
     if flag ==2 
 
       outfile.write "[Header],," + "\n"
@@ -30,7 +32,6 @@ def main()
       outfile.write "Index Adapters,IDT-ILMN TruSeq RNA UD Indexes (96 Indexes),,,,,,,,," +"\n"
       outfile.write ",,,,,,,,,," +"\n"
 
-      
       outfile.write "Description,," + "\n" + "Chemistry,Amplicon,," + "\n" + ",," + "\n\n" 
 
       outfile.write "[Reads],," + "\n"
@@ -56,11 +57,10 @@ def main()
     end
     
     if (flag >= 2)
-
       sequenceLength = cols[9].split("_")
       arrlength=sequenceLength.length()                                                                                                                            
       num = sequenceLength[arrlength-2].split("E")      
-      
+
       if cols[4].length > 10
         temp1 = cols[4].split("-")
 

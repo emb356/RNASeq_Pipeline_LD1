@@ -1,4 +1,6 @@
-#environment variables for ld1 bulk RNA-seq pipeline
+# filename: global_setting.sh
+# environment variables for ld1 bulk RNA-seq pipeline
+
 export NovaSeqRuns=/home/local/ARCS/ngs/isilon/Illumina/
 export NextSeqRuns=/home/local/ARCS/ngs/isilon/NextSeq
 
@@ -10,13 +12,15 @@ export NextSeqRuns=/home/local/ARCS/ngs/isilon/NextSeq
 export FastqDir=/home/local/ARCS/ngs/isilon/FastqCASAVA_ngsld1
 export StatusDir=/home/local/ARCS/ngs/mnt/data/status/
 export SampleSheets=/home/local/ARCS/ngs/mnt/data/status/sampleSheet
+#export SampleSheets=/home/local/ARCS/ngs/mnt/data/status/dummySampleDir
 export RUBY18=/home/local/ARCS/ngs/mnt/data/usr/local/bin/ruby
 
-export RNABASE=/home/local/ARCS/ngs/Pipeline_ld1/RNASEQ
 export NGSSHELL=/home/local/ARCS/ngs/mnt/data/code/shell/
 export UTILS=/home/local/ARCS/ngs/mnt/data/code/NGS/utils/
 export Projects=/home/local/ARCS/ngs/Pipeline_ld1/Projects
-#export PIPEBASE=/home/local/ARCS/ngs/Pipeline_ld1/scripts
 export PIPEBASE=/home/local/ARCS/ngs/mnt/data/code/NGS/Production/CASAVA-Pipeline/
-#export NextSeqOut=/home/local/ARCS/ngs/isilon/FastqNextSeq/
+
 export bcl2fastqBin="bcl2fastq"
+export KALLISTO=/home/local/ARCS/ngs/mnt/data/code/NGS/RNA_seq/KALLISTO
+export RNACode=/home/local/ARCS/ngs/mnt/data/code/NGS/RNA_seq/CASAVA
+export LD1BASE=/home/local/ARCS/ngs/Pipeline_ld1/scripts

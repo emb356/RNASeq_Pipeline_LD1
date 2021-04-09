@@ -31,4 +31,4 @@ done
 echo $genome
 
 # run GNU parallel for the pipeline
-parallel --progress --jobs 4 --joblog $dir/kallisto_joblog.txt < $dir/kall_command.list
+parallel --progress --jobs 25% --joblog $dir/kallisto_joblog.txt < $dir/kall_command.list

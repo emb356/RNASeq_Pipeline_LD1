@@ -1,6 +1,6 @@
 #!/bin/bash -l
 #$ -cwd
-# file name: bclToFastqV2_Nova.sh
+# file name: bclToFastqV3_Nova.sh
 # demultiplexes run data from NovaSeq6000
 
 uname -a

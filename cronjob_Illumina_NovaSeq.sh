@@ -51,7 +51,7 @@ for f in $runs; do
 		    
 	    echo "process $f"
 	    echo -e "$f\t$NovaSeqRuns/$f/\t$FastqDir/$f" >> $StatusDir/basecall.complete
-            cmd1="sh $LD1BASE/bclToFastqV2_Nova.sh -i $NovaSeqRuns/$f -o $FastqDir/$f -b ${bcl2fastqBin} -s $LD1BASE/global_setting.sh -n $nt -m 1"
+            cmd1="sh $LD1BASE/bclToFastqV3_Nova.sh -i $NovaSeqRuns/$f -o $FastqDir/$f -b ${bcl2fastqBin} -s $LD1BASE/global_setting.sh -n $nt -m 1"
 
             echo "$cmd1"
             $cmd1

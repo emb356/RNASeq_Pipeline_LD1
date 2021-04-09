@@ -61,12 +61,17 @@ def main()
       arrlength=sequenceLength.length()                                                                                                                            
       num = sequenceLength[arrlength-2].split("E")      
 
-      if cols[4].length > 10
+# check if dual index
+      if cols[4].length > 10 and cols[4].length < 18
         temp1 = cols[4].split("-")
-
-        outfile.write cols[1]+ "," + cols[2] + "," + cols[2] + "," + "," + "," + "," + temp1[0] + "," + "," + temp1[1] + "," + cols[9] + "\n"
-      else
+      # needs reverse comp of second index
+        reverseTemp = reverseComp(temp1[1])
+        outfile.write cols[1]+ "," + cols[2] + "," + cols[2] + "," + "," + "," + "," + temp1[0] + "," + "," + reverseTemp + "," + cols[9] + "\n"
+      elsif cols[4].length < 10
         outfile.write cols[1]+ "," + cols[2] +"," + cols[2] +"," + "," + "," + "," + cols[4]+ "," + "," + "," + cols[9] + "\n" 
+      else
+        temp1 = cols[4].split("-")
+        outfile.write cols[1]+ "," + cols[2] + "," + cols[2] + "," + "," + "," + "," + temp1[0] + "," + "," + temp1[1] + "," + cols[9] + "\n"
       end
     end
     flag = flag + 1
@@ -76,9 +81,26 @@ def main()
 
   infile.close()
   outfile.close()
-
-
 end
 
+
+def reverseComp(index)
+  temp = ""
+  count = index.length-1
+  
+  for i in 0..index.length-1
+    if index[i] == "T"
+      temp = "A".concat(temp)
+    elsif index[i] == "A"
+      temp = "T".concat(temp)
+    elsif index[i] == "C"
+      temp = "G".concat(temp)
+    elsif index[i] == "G"
+      temp = "C".concat(temp)
+    end
+    count = count -1
+  end  
+  return temp   
+end
 
 main()

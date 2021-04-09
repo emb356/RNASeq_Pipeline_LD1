@@ -24,11 +24,11 @@ if [[ -d $filesDir ]]; then
     done
 fi
 
-# rsync fastqs to Web/release if fastqDir exists
+# move fastqs to Web/release if fastqDir exists
 if [[ -d $fastqDir ]]; then
    for f in $fastqDir/*gz; do
       tf=$(readlink -f $f)
-      rsync -avPh $tf $webdir/${dir}
+      mv $tf $webdir/${dir}
 
    done
    

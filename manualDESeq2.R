@@ -33,7 +33,7 @@ rownames( cts ) <- cts[,1]
 cts <- cts[,2:dim(cts)[2]]
 cts <- round(cts)
 head(cts)
-
+colnames(cts) <- samples
 rownames(sampleTable) <- colnames(cts)
 sampleTable
 dds <- DESeqDataSetFromMatrix( countData = cts,

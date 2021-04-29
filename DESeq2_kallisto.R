@@ -38,6 +38,9 @@ if (genome == "human" | genome == "humanALL"){
 } else if (genome == "horse"){
   ensembl_dataset = "ecaballus_gene_ensembl"
   transcript_id = "refseq_mrna"
+} else if (genome == "pig"){
+  ensembl_dataset = "sscrofa_gene_ensembl"
+  transcript_id = "refseq_mrna"
 } else if (genome == "monkey"){
   ensembl_dataset = "csabaeus_gene_ensembl"
 } else if (genome == "rat"){

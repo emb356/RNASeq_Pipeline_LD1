@@ -41,6 +41,8 @@ if (genome == "human" | genome == "humanALL" | genome == "humanLNCRNA"){
   ensembl_dataset = "rnorvegicus_gene_ensembl"
 } else if (genome == "pig"){
   ensembl_dataset = "sscrofa_gene_ensembl"
+} else if (genome == "chicken"){
+  ensembl_dataset = "ggallus_gene_ensembl"
 } else if (genome == "yeast"){
   ensembl_dataset = "scerevisiae_gene_ensembl"
   gene_name = "ensembl_gene_id"

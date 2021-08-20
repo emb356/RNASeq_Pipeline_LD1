@@ -19,12 +19,7 @@ def main()
     cols = line.chomp.split(/,/)
     if flag ==2
  
-      sccfile.write "[Header]" + "\n"
-      sccfile.write "IEMFileVersion,4" +"\n\n"
-      sccfile.write "[Reads]" + "\n"
-      sccfile.write "26" +"\n" + "8" + "\n\n"
-      sccfile.write "[Data]" + "\n"
-      sccfile.write "Lane,Sample_ID,index,Sample_Project" +"\n"
+      sccfile.write "Lane,Sample,Index" +"\n"
     end
  
     
@@ -35,7 +30,7 @@ def main()
       num = sequenceLength[arrlength-2].split("E")      
       # identify single cell projects
       if cols[9].include? "_SCC_"
-        sccfile.write cols[1]+ "," + cols[2] + "," + cols[4] + "," + cols[9] + "\n"
+        sccfile.write cols[1]+ "," + cols[2] + "," + cols[4] + "\n"
       end
     end
     flag = flag + 1

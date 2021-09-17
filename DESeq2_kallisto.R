@@ -73,7 +73,7 @@ dds <- DESeq(dds)
 res <- results(dds)
 res <- res[order(res$padj),]
 res_df <- as.data.frame(res)
-top_genes <- rownames(res_df)[1:50]
+top_genes <- rownames(res_df)[1:25]
 print(sampleTable)
 
 # write results to to_release
@@ -165,7 +165,7 @@ library( "RColorBrewer" )
 library( "gplots" )
 hmcol <- colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(100)
 plotHeatmap <- heatmap.2( as.matrix(vsd_sub),
-           main="Top 50 DE Genes after VST (by Significance)",
+           main="Top 25 DE Genes after VST (by Significance)",
            col = hmcol,
            scale="row",
            trace="none")

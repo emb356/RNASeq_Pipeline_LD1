@@ -63,7 +63,7 @@ for f in $runs; do
                 $cmd1
             fi
             # if singlecell sample sheet is not empty (over 9 lines), start demultiplex
-            if [ "$scclines" -gt 9 ]; then		
+            if [ "$scclines" -gt 1 ]; then		
                 echo "$cmd2"
                 $cmd2
             fi
@@ -86,15 +86,14 @@ for f in $runs; do
     
     g=`grep -w $f $StatusDir/basecall.complete`
     if [[ $g == "" ]]; then
-	if [[ ! -s $SampleSheets/$f.csv ]]; then
-	    echo "SampleSheet ($SampleSheets/$f.csv) is missing. Failed to start demultiplexing." ;
-	    continue
-	fi
-        cmd1="ruby $LD1BASE/NextSeqSampleSheet.rb $SampleSheets/$f.csv $NextSeqRuns/$f/SampleSheet.csv"
-        echo $cmd1
-        $cmd1
 
-	if [[ -s $NextSeqRuns/$f/SampleSheet.csv && -s  $NextSeqRuns/$f/RTAComplete.txt ]]; then
+	if [[ -s $SampleSheets/$f.csv -s  $NextSeqRuns/$f/RTAComplete.txt ]]; then
+            # create sample sheet
+            echo "SampleSheet ($SampleSheets/$f.csv) found."
+            cmd1="ruby $LD1BASE/NextSeqSampleSheet.rb $SampleSheets/$f.csv $NextSeqRuns/$f/SampleSheet.csv"
+            echo $cmd1
+            $cmd1
+
 	    echo "process $f"
 	    echo -e "$f\t$NextSeqRuns/$f/\t$FastqDir/$f" >> $StatusDir/basecall.complete
             cmd1="sh $LD1BASE/bclToFastqV2_Nextseq.sh -i $NextSeqRuns/$f -o $FastqDir/$f -b ${bcl2fastqBin} -s $LD1BASE/global_setting.sh -n $nt -m 1"

@@ -38,11 +38,11 @@ else
   ignore="--filter-dual-index"
 fi
    
-cmd="cellranger mkfastq --run=$RunDir --output-dir=$OutDir --samplesheet=$SampSheet --localcores=8 --localmem=34 $ignore --barcode-mismatches=0"
+#cmd="cellranger mkfastq --run=$RunDir --output-dir=$OutDir --samplesheet=$SampSheet --localcores=8 --localmem=34 $ignore --barcode-mismatches=0"
 #cmd="cellranger mkfastq --run=$RunDir --output-dir=$OutDir --samplesheet=$SampSheet --localcores=8 --localmem=34 --barcode-mismatches=0"
 
 #cmd="cellranger mkfastq --run=$RunDir --output-dir=$OutDir --samplesheet=$SampSheet --localcores=8 --localmem=34"
-#cmd="cellranger mkfastq --run=$RunDir --output-dir=$OutDir --csv=$SampSheet --localcores=8 --localmem=34 --barcode-mismatches=0"
+cmd="cellranger mkfastq --run=$RunDir --output-dir=$OutDir --csv=$SampSheet --localcores=8 --localmem=34 $ignore --barcode-mismatches=0"
 
 #cmd="cellranger mkfastq --run=$RunDir --output-dir=$OutDir --samplesheet=$SampSheet --localcores=8 --localmem=34 --barcode-mismatches=0 --use-bases-mask=Y27n*,I10,I10,Y91n* --ignore-dual-index"
 echo $cmd

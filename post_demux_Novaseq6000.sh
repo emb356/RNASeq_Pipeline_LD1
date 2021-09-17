@@ -28,7 +28,7 @@ for projectid in *_NOVASEQ; do
     echo "Starting post-demux analyses for $projectid in $projDir"
 
 # if there are samples were sequenced in multiple lanes, merge them (while keeping the unmerged versions available, if necessary)
-    echo "checking to merge fasts across lanes"
+    echo "checking to merge fastqs across lanes"
     numDupSamples=$(ls *_R1_*.gz | cut -f 1 -d "_" | sort | uniq -d | wc -l )
     if [ $numDupSamples -gt 0 ]; then
 	mkdir unmergedFqs
@@ -65,17 +65,21 @@ for projectid in *_NOVASEQ; do
 	plrun=`echo $projectid | cut -f7 -d '_'`
 	if [[ $plrun == "PLATESEQ" ]]; then
 	    APP=$plrun
+        else # otherwise self library
+            APP="RNA-seq/"
 	fi
+    elif [[ $app == "EXOME" ]]; then
+            APP="Exome/"
     else
         continue;
     fi
 
     # if this is a PLATEseq run, we need to run it's own pipeline script
-    if [[ $APP == "PLATESEQ" ]]; then
-	cmd="sh $LD1BASE/plateseq_post_demux.sh $projDir"
-	echo $cmd
-	$cmd
-    fi
+#    if [[ $APP == "PLATESEQ" ]]; then
+#	cmd="sh $LD1BASE/plateseq_post_demux.sh $projDir"
+#	echo $cmd
+#	$cmd
+#    fi
 
 
     # do the following, if this isn't a PLATESeq job
@@ -111,7 +115,8 @@ for projectid in *_NOVASEQ; do
     	fi
     	
     	echo $ln_fq_1
-    	
+        
+        # only run kallisto for standard RNA projects (not self library) 	
     	if [[ $app =~ "RNA" || $app =~ "CDNA" || $app =~ "mirna-seq" ]]; then
     	    echo "sh $LD1BASE/RNA_pipeline_kallisto.sh $organism $ln_fq_1 $ln_fq_2" >> $Projects/$APP/$projectid/$runid/kall_command.list
     	else
@@ -124,7 +129,7 @@ for projectid in *_NOVASEQ; do
        # if all samples have finished processing with kallisto, create release files
        logCount=`ls -l logs/*txt | wc -l`
        sampCount=`ls -l $organism"_kallisto" | grep -c ^d`
-       if [ "$logCount" -eq "$sampCount" ]; then
+       if [ "$logCount" -eq "$sampCount" ] && [ -d $organism"_kallisto" ]; then
            cd $organism"_kallisto"
            cmd="sh $LD1BASE/kallistoRelease.sh"
            echo $cmd
